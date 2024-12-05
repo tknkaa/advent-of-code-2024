@@ -21,7 +21,7 @@ func main() {
 
 		firstPart, err := strconv.Atoi(input[start+len("mul(") : mid])
 		if err != nil {
-			input = input[end+1:]
+			input = input[start+1:]
 			println("the former is not a number")
 			continue
 		} else {
@@ -31,7 +31,7 @@ func main() {
 		secondPart, err := strconv.Atoi(input[mid+1 : end])
 
 		if err != nil {
-			input = input[end+1:]
+			input = input[mid+1:]
 			println("the latter is not a number")
 			continue
 		} else {
