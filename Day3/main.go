@@ -14,12 +14,20 @@ func main() {
 	for scanner.Scan() {
 		input += scanner.Text()
 	}
+	input = "do()" + input + "do()" + "don't()"
 	count := 0
 
 	for strings.Index(input, "mul(") != -1 {
 		start := strings.Index(input, "mul(")
 		mid := start + strings.Index(input[start:], ",")
 		end := mid + strings.Index(input[mid:], ")")
+		do := strings.Index(input, "do()")
+		dont := strings.Index(input, "don't()")
+
+		if dont < start && (do < dont || start < do) {
+			input = "don't()" + input[start+1:]
+			continue
+		}
 
 		firstPart, err := strconv.Atoi(input[start+len("mul(") : mid])
 		if err != nil {
