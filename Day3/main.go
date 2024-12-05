@@ -11,8 +11,7 @@ import (
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	input := ""
-	for i := 0; i < 6; i++ {
-		scanner.Scan()
+	for scanner.Scan() {
 		input += scanner.Text()
 	}
 	count := 0
