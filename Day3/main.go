@@ -10,8 +10,11 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	input := scanner.Text()
+	input := ""
+	for i := 0; i < 6; i++ {
+		scanner.Scan()
+		input += scanner.Text()
+	}
 	count := 0
 
 	for strings.Index(input, "mul(") != -1 {
@@ -37,7 +40,7 @@ func main() {
 		} else {
 			fmt.Println(secondPart)
 		}
-		count += firstPart + secondPart
+		count += firstPart * secondPart
 		input = input[end+1:]
 	}
 	fmt.Printf("the total is %v\n", count)
