@@ -8,25 +8,43 @@ import (
 	"strings"
 )
 
-func compareIntSlices(a []int, b []int) bool {
+func createReversePairs(update []int) [][]int {
+	ans := make([][]int, 0)
+	for i := 0; i < len(update)-1; i++ {
+		for j := i + 1; j < len(update); j++ {
+			ans = append(ans, []int{update[j], update[i]})
+		}
+	}
+	return ans
+}
+
+func judgeViolation(rules [][]int, pairs [][]int) bool {
+	for i := 0; i < len(pairs); i++ {
+		for j := 0; j < len(rules); j++ {
+			if compareSlice(pairs[i], rules[j]) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func compareSlice(a []int, b []int) bool {
 	if len(a) != len(b) {
 		return false
 	}
+
 	for i := 0; i < len(a); i++ {
 		if a[i] != b[i] {
 			return false
 		}
 	}
+
 	return true
 }
 
-func includeIntSlices(a [][]int, b []int) bool {
-	for i := 0; i < len(a); i++ {
-		if compareIntSlices(a[i], b) {
-			return true
-		}
-	}
-	return false
+func findMiddle(update []int) int {
+	return update[(len(update)+1)/2-1]
 }
 
 func main() {
@@ -43,7 +61,6 @@ func main() {
 		tmp[1], _ = strconv.Atoi(input[mid+1:])
 		rules = append(rules, tmp)
 	}
-	fmt.Println(rules)
 
 	updates := make([][]int, 0)
 	for scanner.Scan() {
@@ -56,20 +73,17 @@ func main() {
 		}
 		updates = append(updates, nums)
 	}
-	fmt.Println(updates)
 
 	count := 0
+
 	for i := 0; i < len(updates); i++ {
 		update := updates[i]
-		for j := 0; j < len(updates[i])-1; j++ {
-			tmp := []int{update[j], update[j+1]}
-			if !includeIntSlices(rules, tmp) {
-				break
-			}
-			if j == len(updates[i])-2 {
-				count++
-			}
+		if judgeViolation(rules, createReversePairs(update)) {
+			continue
 		}
+		fmt.Println(update)
+		fmt.Println(findMiddle(update))
+		count += findMiddle(update)
 	}
 	fmt.Println(count)
 }
