@@ -8,22 +8,32 @@ import (
 	"strings"
 )
 
-func createReversePairs(update []int) [][]int {
-	ans := make([][]int, 0)
-	for i := 0; i < len(update)-1; i++ {
-		for j := i + 1; j < len(update); j++ {
-			ans = append(ans, []int{update[j], update[i]})
-		}
+func orderCorrectly(rules [][]int, update []int) []int {
+	isViolate, j, k := judgeUpdateViolation(rules, update)
+	for isViolate {
+		tmp := update[k]
+		update[k] = update[j]
+		update[j] = tmp
+		isViolate, j, k = judgeUpdateViolation(rules, update)
 	}
-	return ans
+	return update
 }
 
-func judgeViolation(rules [][]int, pairs [][]int) bool {
-	for i := 0; i < len(pairs); i++ {
-		for j := 0; j < len(rules); j++ {
-			if compareSlice(pairs[i], rules[j]) {
-				return true
+func judgeUpdateViolation(rules [][]int, update []int) (bool, int, int) {
+	for i := 0; i < len(update)-1; i++ {
+		for j := i + 1; j < len(update); j++ {
+			if judgcPairViolation(rules, []int{update[j], update[i]}) {
+				return true, i, j
 			}
+		}
+	}
+	return false, 0, 0
+}
+
+func judgcPairViolation(rules [][]int, pair []int) bool {
+	for j := 0; j < len(rules); j++ {
+		if compareSlice(pair, rules[j]) {
+			return true
 		}
 	}
 	return false
@@ -78,8 +88,11 @@ func main() {
 
 	for i := 0; i < len(updates); i++ {
 		update := updates[i]
-		if judgeViolation(rules, createReversePairs(update)) {
+		isViolate, _, _ := judgeUpdateViolation(rules, update)
+		if !isViolate {
 			continue
+		} else {
+			update = orderCorrectly(rules, update)
 		}
 		fmt.Println(update)
 		fmt.Println(findMiddle(update))
