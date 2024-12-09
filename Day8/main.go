@@ -35,7 +35,7 @@ func chooseAntennaPairs(antennas []Vertex) [][]Vertex {
 	return antennaPairs
 }
 
-func findAntennas(antenna byte, field [][]byte) []Vertex {
+func findAntennas(antenna rune, field [][]rune) []Vertex {
 	if len(field) == 0 {
 		return []Vertex{}
 	}
@@ -61,15 +61,15 @@ func judgeContains(prev []Vertex, new Vertex) bool {
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	field := make([][]byte, 0)
+	field := make([][]rune, 0)
 	for scanner.Scan() {
-		field = append(field, scanner.Bytes())
+		field = append(field, []rune(scanner.Text()))
 	}
-	emptyFlag := []byte(".")[0]
+	emptyFlag := []rune(".")[0]
 	width := len(field[0])
 	height := len(field)
 
-	antennas := make([]byte, 0)
+	antennas := make([]rune, 0)
 	for x := 0; x < width; x++ {
 		for y := 0; y < height; y++ {
 			if field[y][x] != emptyFlag && !slices.Contains(antennas, field[y][x]) {
