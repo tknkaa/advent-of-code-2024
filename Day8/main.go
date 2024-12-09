@@ -84,19 +84,10 @@ func main() {
 		pairs := chooseAntennaPairs(locations)
 		for _, pair := range pairs {
 			antinodePairs := findAntinode(width, height, pair[0], pair[1])
-			if len(antinodePairs) == 0 {
-				continue
-			} else if len(antinodePairs) == 1 && !judgeContains(antinodes, antinodePairs[0]) {
-				antinodes = append(antinodes, antinodePairs[0])
-			} else if len(antinodePairs) == 2 {
-				if !judgeContains(antinodes, antinodePairs[0]) {
-					antinodes = append(antinodes, antinodePairs[0])
+			for i := 0; i < len(antinodePairs); i++ {
+				if !judgeContains(antinodes, antinodePairs[i]) {
+					antinodes = append(antinodes, antinodePairs[i])
 				}
-				if !judgeContains(antinodes, antinodePairs[1]) {
-					antinodes = append(antinodes, antinodePairs[1])
-				}
-			} else {
-				continue
 			}
 			fmt.Println("antenna", antenna, "pair", pair, "antinodePair", antinodePairs)
 		}
