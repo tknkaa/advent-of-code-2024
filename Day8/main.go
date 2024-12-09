@@ -16,11 +16,20 @@ func findAntinode(width int, height int, loc1 Vertex, loc2 Vertex) []Vertex {
 	dy := loc2.y - loc1.y
 	dx := loc2.x - loc1.x
 	antinodes := make([]Vertex, 0)
-	if 0 <= loc1.y-dy && loc1.y-dy < height && 0 <= loc1.x-dx && loc1.x-dx < width {
-		antinodes = append(antinodes, Vertex{y: loc1.y - dy, x: loc1.x - dx})
+	y1 := loc1.y - dy
+	x1 := loc1.x - dx
+	y2 := loc2.y + dy
+	x2 := loc2.x + dx
+
+	for 0 <= y1 && y1 < height && 0 <= x1 && x1 < width {
+		antinodes = append(antinodes, Vertex{y: y1, x: x1})
+		y1 -= dy
+		x1 -= dx
 	}
-	if 0 <= loc2.y+dy && loc2.y+dy < height && 0 <= loc2.x+dx && loc2.x+dx < width {
-		antinodes = append(antinodes, Vertex{y: loc2.y + dy, x: loc2.x + dx})
+	for 0 <= y2 && y2 < height && 0 <= x2 && x2 < width {
+		antinodes = append(antinodes, Vertex{y: y2, x: x2})
+		y2 += dy
+		x2 += dx
 	}
 	return antinodes
 }
@@ -79,6 +88,13 @@ func main() {
 	}
 
 	antinodes := make([]Vertex, 0)
+
+	//同じコード繰り返していてあんまよくないけど、後からアンテナの位置をappendすると重複しそう
+	for _, anntenna := range antennas {
+		locations := findAntennas(anntenna, field)
+		antinodes = append(antinodes, locations...)
+	}
+
 	for _, antenna := range antennas {
 		locations := findAntennas(antenna, field)
 		pairs := chooseAntennaPairs(locations)
